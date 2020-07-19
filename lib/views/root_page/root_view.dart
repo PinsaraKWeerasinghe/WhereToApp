@@ -2,6 +2,7 @@ import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/home_page/home_page.dart';
 import 'package:whereto/views/login_page/login_bloc.dart';
 import 'package:whereto/views/login_page/login_page.dart';
@@ -17,7 +18,7 @@ class RootView extends StatelessWidget {
   final log = Logger();
 
   static final loadingWidget = Center(
-    child: CircularProgressIndicator(),
+    child: Image.asset(Assets.LOGO_GRAPHIC),
   );
 
   @override
