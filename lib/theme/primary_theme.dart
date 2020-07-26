@@ -1,5 +1,6 @@
-import 'styled_colors.dart';
 import 'package:flutter/material.dart';
+
+import 'styled_colors.dart';
 
 abstract class PrimaryTheme {
   PrimaryTheme._();

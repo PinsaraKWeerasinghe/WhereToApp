@@ -62,21 +62,6 @@ class RootBloc extends Bloc<RootEvent, RootState> {
     await super.close();
   }
 
-  void _getRoles(final String email, Function(List<User>) callback) {
-    _roleSubscription?.cancel();
-    _roleSubscription = userRepo
-        .query(
-          specification: ComplexSpecification(
-            [
-              ComplexWhere(User.EMAIL_FIELD, isEqualTo: email),
-            ],
-          ),
-        )
-        .listen(
-          callback,
-        );
-  }
-
   void _addErr(e) {
     log.e('$e');
     try {

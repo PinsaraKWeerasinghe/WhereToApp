@@ -1,20 +1,41 @@
-import 'package:built_value/built_value.dart';
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'user.g.dart';
+import 'package:fcode_bloc/fcode_bloc.dart';
 
-@BuiltValue(instantiable: false)
-abstract class User implements DBModelI {
-  static const EMAIL_FIELD = "email";
-  static const NAME_FIELD = "name";
-  static const LAST_NAME_FIELD = "lastName";
-  static const TYPE_FIELD = "type";
+class User extends DBModel {
+  String name;
+  String email;
+  String tp;
+  String address;
+  String district;
+  DocumentReference urbanCouncil;
+  GeoPoint homeLocation;
+  String fcmToken;
 
-  String get email;
-  String get name;
-  String get lastName;
+  User({
+    DocumentReference ref,
+    this.name,
+    this.email,
+    this.tp,
+    this.address,
+    this.district,
+    this.urbanCouncil,
+    this.homeLocation,
+    this.fcmToken,
+  }) : super(ref: ref);
 
   @override
-  String get id => ref.documentID;
+  User clone() {
+    return User(
+      ref: ref,
+      name: name,
+      email: email,
+      tp: tp,
+      address: address,
+      district: district,
+      urbanCouncil: urbanCouncil,
+      homeLocation: homeLocation,
+      fcmToken: fcmToken,
+    );
+  }
 }

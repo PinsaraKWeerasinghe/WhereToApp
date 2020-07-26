@@ -1,8 +1,6 @@
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import 'package:whereto/db/authentication.dart';
 import 'package:whereto/theme/styled_colors.dart';
 import 'package:whereto/views/hometab_page/hometab_bloc.dart';
 import 'package:whereto/views/hometab_page/hometab_page.dart';

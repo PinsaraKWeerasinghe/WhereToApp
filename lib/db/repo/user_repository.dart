@@ -36,19 +36,19 @@ class UserRepository extends FirebaseRepository<User> {
 
   @override
   Map<String, dynamic> toMap(User user) {
-    final Map<String, dynamic> data = {
-      User.EMAIL_FIELD: user.email,
-      User.NAME_FIELD: user.name,
-      User.LAST_NAME_FIELD: user.lastName,
-      User.TYPE_FIELD: user.runtimeType.toString(),
-    };
+//    final Map<String, dynamic> data = {
+//      User.email: user.email,
+//      User.NAME_FIELD: user.name,
+//      User.LAST_NAME_FIELD: user.lastName,
+//      User.TYPE_FIELD: user.runtimeType.toString(),
+//    };
 
 //    if (user is Client) {
 //      data[Client.THERAPIST] = user.therapist;
 //      data[Client.CODE]=user.code;
 //      data[Client.NOTE]=user.note;
 //    }
-    return data;
+//    return data;
   }
 
   @override

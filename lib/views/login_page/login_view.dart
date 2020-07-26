@@ -1,14 +1,13 @@
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:whereto/theme/styled_colors.dart';
+import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/home_page/home_page.dart';
 import 'package:whereto/views/login_page/login_event.dart';
 import 'package:whereto/views/whereto_app_bloc.dart';
 import 'package:whereto/views/whereto_app_event.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
-import 'package:whereto/util/assets.dart';
-import 'package:whereto/theme/styled_colors.dart';
 
 import 'login_bloc.dart';
 import 'login_state.dart';

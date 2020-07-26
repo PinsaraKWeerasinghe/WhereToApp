@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/db/authentication.dart';
