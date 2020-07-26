@@ -20,13 +20,90 @@ class SearchTabView extends StatelessWidget {
     log.d("Loading SearchTab View");
 
     CustomSnackBar customSnackBar;
+    FocusNode _focusNodeText;
+    final _textEditingController = TextEditingController();
+
     final scaffold = Scaffold(
+      appBar: AppBar(
+        elevation: 2,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Color(0xfff6f6f6),
+        title: Text(
+          "Find Your Place or Person...",
+          style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+        ),
+      ),
       body: BlocBuilder<SearchTabBloc, SearchTabState>(
           condition: (pre, current) => true,
           builder: (context, state) {
-            return Center(
-              child: Text("HI..."),
-            );
+            return Column(
+              children: [
+                Container(
+                  height: 60,
+                  padding: EdgeInsets.all(5),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: Colors.grey),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        // Button send image
+                        Container(
+                          width: MediaQuery.of(context).size.width-60,
+                          padding: EdgeInsets.only(left: 15),
+                          child: TextField(
+                            focusNode: _focusNodeText,
+                            style: TextStyle(
+                                color: Colors.black54, fontSize: 15.0),
+                            maxLines: 1,
+                            controller: _textEditingController,
+//                            onChanged: (text) {
+//                              if (_focusNodeText.hasFocus) {
+//                                searchSubject
+//                                    .add(text?.trim()?.toLowerCase());
+//                              } else {
+//                                searchSubject.add(null);
+//                              }
+//                            },
+                            decoration: InputDecoration.collapsed(
+                              hintText: 'Search...',
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        ),
+
+                        // Button send message
+                        Material(
+                          child: new Container(
+                            margin: new EdgeInsets.symmetric(horizontal: 8.0),
+                            child: ClipOval(
+                              child: Material(
+                                color: Colors.blue,
+                                child: new InkWell(
+                                  child: SizedBox(
+                                      width: 30,
+                                      height: 30,
+                                      child: new Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      )),
+                                  onTap: (){},
+                                ),
+                              ),
+                            ),
+                          ),
+                          color: Colors.transparent,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            )
+            ;
           }),
     );
 
