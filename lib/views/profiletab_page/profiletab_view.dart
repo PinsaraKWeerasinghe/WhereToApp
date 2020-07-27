@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
+import 'package:whereto/util/assets.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
 import 'profiletab_bloc.dart';
@@ -21,13 +22,50 @@ class ProfileTabView extends StatelessWidget {
 
     CustomSnackBar customSnackBar;
     final scaffold = Scaffold(
-      body: BlocBuilder<ProfileTabBloc, ProfileTabState>(
-          condition: (pre, current) => true,
-          builder: (context, state) {
-            return Center(
-              child: Text("HI..."),
-            );
-          }),
+      appBar: AppBar(
+        elevation: 2,
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Color(0xfff6f6f6),
+        title: Text(
+          "Profile",
+          style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Center(
+            child: Container(
+              height: 100,
+              width: 100,
+              margin: EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(Assets.proPic),
+                    fit: BoxFit.cover,
+                  ),
+                  color: Colors.white10,
+                  shape: BoxShape.circle),
+            ),
+          ),
+          Text(
+            "Steewan Smith",
+            style: TextStyle(
+                fontFamily: 'Raleway', color: Colors.black, fontSize: 20),
+          ),
+          Padding(padding: EdgeInsets.all(10)),
+          Text("Hi there! this is status."),
+          Padding(padding: EdgeInsets.all(10)),
+          Expanded(
+            child: Container(
+              color: Colors.grey[300],
+              child: Center(
+                child: Text("No content available!"),
+              ),
+            ),
+          )
+        ],
+      ),
     );
 
     return MultiBlocListener(

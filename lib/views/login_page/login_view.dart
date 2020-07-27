@@ -35,6 +35,7 @@ class LoginView extends StatelessWidget {
 
     _customSnackBar = CustomSnackBar(scaffoldKey: scaffoldKey);
     final scaffold = Scaffold(
+      backgroundColor: Colors.purple[100],
       body: BlocBuilder<LoginBloc, LoginState>(
           condition: (pre, current) => true,
           builder: (context, state) {
@@ -85,7 +86,7 @@ class LoginView extends StatelessWidget {
                               fontSize: 20,
                             ),
                             helperText:
-                            '10 Digit Number. Ex:0773683072',
+                            'Enter Email Address',
                             helperStyle: TextStyle(
                               fontSize: 15,
                             ),

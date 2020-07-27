@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
@@ -17,7 +18,7 @@ class RootView extends StatelessWidget {
   final log = Logger();
 
   static final loadingWidget = Center(
-    child: Image.asset(Assets.LOGO_GRAPHIC),
+    child: CupertinoActivityIndicator(),
   );
 
   @override

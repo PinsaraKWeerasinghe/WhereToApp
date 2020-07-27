@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:whereto/views/root_page/root_page.dart';
 
+import 'widgets/SplashScreen.dart';
+
 void main() {
   runApp(WhereTo());
 }
@@ -14,13 +16,16 @@ class WhereTo extends StatelessWidget {
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
     ),
-    home: RootView(),
+    routes: <String, WidgetBuilder>{
+      '/Root': (BuildContext context) => RootView()
+    },
+    home: SplashScreen(),
   );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context)=>RootBloc(context),
+      create: (context) => RootBloc(context),
       child: materialApp,
     );
   }

@@ -13,4 +13,5 @@ abstract class Assets {
   static const s8 = 'graphics/SampleStories/8.png';
   static const s9 = 'graphics/SampleStories/9.jpg';
   static const s10 = 'graphics/SampleStories/10.jpg';
+  static const proPic = 'graphics/Propic.jpeg';
 }
