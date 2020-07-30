@@ -3,6 +3,7 @@ abstract class Assets {
 
   static const GRAPHIC = 'graphics/';
   static const LOGO_GRAPHIC = 'graphics/gistoncampus.png';
+  static const APP_NAME_GRAPHIC = 'graphics/gistoncampus_wsr_name.png';
   static const s1 = 'graphics/SampleStories/1.png';
   static const s2 = 'graphics/SampleStories/2.jpg';
   static const s3 = 'graphics/SampleStories/3.png';

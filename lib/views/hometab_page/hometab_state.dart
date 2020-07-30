@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
@@ -5,8 +6,8 @@ import 'package:whereto/db/model/Story.dart';
 @immutable
 class HomeTabState {
   final String error;
-  final List<Story> stories;
   final List<Post> posts;
+  final List<Story> stories;
 
   HomeTabState({
     @required this.error,

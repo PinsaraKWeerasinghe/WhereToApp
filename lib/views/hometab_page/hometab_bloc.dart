@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
+import 'package:whereto/db/repo/Stories_repository.dart';
 import 'package:whereto/util/assets.dart';
 
 import 'hometab_event.dart';
@@ -12,6 +14,7 @@ import 'hometab_state.dart';
 
 class HomeTabBloc extends Bloc<HomeTabEvent, HomeTabState> {
   static final log = Logger();
+  final StoriesRepository _storiesRepository = new StoriesRepository();
 
   HomeTabBloc(BuildContext context);
 
@@ -67,7 +70,8 @@ class HomeTabBloc extends Bloc<HomeTabEvent, HomeTabState> {
     }
   }
 
-  List<Story> loadStories() {
+  List<Story> loadStories()  {
+    Stream<QuerySnapshot> storiess= _storiesRepository.getStoriesStream();
     List<Story> stories = new List();
     stories.add(Story(name: "Jsmith", photo: Assets.s1));
     stories.add(Story(name: "Jsmith", photo: Assets.s2));

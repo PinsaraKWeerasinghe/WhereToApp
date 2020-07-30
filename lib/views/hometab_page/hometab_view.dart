@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/db/authentication.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
+import 'package:whereto/db/repo/Posts_repository.dart';
+import 'package:whereto/db/repo/Stories_repository.dart';
 import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/hometab_page/hometab_event.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
@@ -18,7 +22,8 @@ class HomeTabView extends StatefulWidget {
 
 class _HomeTabViewState extends State<HomeTabView> {
   final log = Logger();
-
+  final StoriesRepository _storiesRepository = new StoriesRepository();
+  final PostsRepository _postsRepository = new PostsRepository();
   static final loadingWidget = Center(
     child: CircularProgressIndicator(),
   );
@@ -31,11 +36,12 @@ class _HomeTabViewState extends State<HomeTabView> {
   @override
   Widget build(BuildContext context) {
     final hometabBloc = BlocProvider.of<HomeTabBloc>(context);
+
 //    final rootBloc = BlocProvider.of<RootPageBloc>(context);
     log.d("Loading HomeTab View");
 
-    hometabBloc.add(LoadStoriesEvent());
-    hometabBloc.add(LoadPostsEvent());
+//    hometabBloc.add(LoadStoriesEvent());
+//    hometabBloc.add(LoadPostsEvent());
 
     CustomSnackBar customSnackBar;
     final scaffold = Scaffold(
@@ -47,9 +53,9 @@ class _HomeTabViewState extends State<HomeTabView> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              "Gistoncampus",
-              style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
+            Image.asset(
+              Assets.APP_NAME_GRAPHIC,
+              width: MediaQuery.of(context).size.width - 200,
             ),
             IconButton(icon: Icon(Icons.camera_alt), onPressed: null)
           ],
@@ -91,20 +97,33 @@ class _HomeTabViewState extends State<HomeTabView> {
   }
 
   Widget stories(List<Story> stories) {
-    List<Widget> cards = List();
-    if (stories.length != 0) {
-      for (Story s in stories) {
-        cards.add(story(s));
-      }
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: cards,
+    return Flex(
+      direction: Axis.horizontal,
+      children: [
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: StreamBuilder<QuerySnapshot>(
+              stream: _storiesRepository.getStoriesStream(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<Story> stories = new List();
+                  stories = snapshot.data.documents
+                      .map((doc) => _storiesRepository.fromSnapshot(doc))
+                      .toList();
+                  List<Widget> cards = new List();
+                  for (Story s in stories) {
+                    cards.add(story(s));
+                  }
+                  return Row(
+                    children: cards,
+                  );
+                } else {
+                  return Center(child: Text("No Stories"));
+                }
+              }),
         ),
-      );
-    } else {
-      return Center(child: Text("No Stories"));
-    }
+      ],
+    );
   }
 
   Widget story(Story story) {
@@ -118,7 +137,7 @@ class _HomeTabViewState extends State<HomeTabView> {
           child: new Container(
             decoration: new BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(story.photo),
+                image: NetworkImage(story.photo),
                 fit: BoxFit.cover,
               ),
               color: Colors.white,
@@ -149,20 +168,33 @@ class _HomeTabViewState extends State<HomeTabView> {
   }
 
   Widget posts(List<Post> posts) {
-    List<Widget> cards = List();
-    if (posts.length != 0) {
-      for (Post p in posts) {
-        cards.add(post(p));
-      }
-      return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: cards,
-        ),
-      );
-    } else {
-      return Center(child: Text("No Posts"));
-    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: StreamBuilder<QuerySnapshot>(
+          stream: _postsRepository.getStoriesStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<Post> posts = new List();
+              posts = snapshot.data.documents
+                  .map((doc) => _postsRepository.fromSnapshot(doc))
+                  .toList();
+              if(posts!=null && posts.length!=0){
+                List<Widget> cards = new List();
+                for (Post p in posts) {
+                  cards.add(post(p));
+                }
+                return Column(
+                  children: cards,
+                );
+              }else{
+                return Center(child: Text("No Posts Here..."));
+              }
+
+            } else {
+              return Center(child: Text("No Posts..."));
+            }
+          }),
+    );
   }
 
   Widget post(Post post) {
@@ -180,7 +212,7 @@ class _HomeTabViewState extends State<HomeTabView> {
                 height: 300,
                 decoration: new BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(post.photo),
+                    image: NetworkImage(post.photo),
                     fit: BoxFit.cover,
                   ),
                   color: Colors.white,

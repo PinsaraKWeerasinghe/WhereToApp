@@ -9,4 +9,6 @@ class DBUtil{
   static const NOTIFICATION = 'Notification';
   static const COMPLETED_ACTIVITY = 'CompletedActivity';
   static const ASSIGNED_ACTIVITY = 'AssignedActivity';
+  static const STORIES = 'Stories';
+  static const POSTS='Posts';
 }

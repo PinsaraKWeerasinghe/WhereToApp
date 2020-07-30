@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Center(
             child: SizedBox(
-              width: MediaQuery.of(context).size.width/3,
+              width: MediaQuery.of(context).size.width / 3,
               child: Image.asset(Assets.LOGO_GRAPHIC),
             ),
           ),
@@ -25,13 +25,17 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text("Powered By:"),
-                Text("EVOLABS",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
-                Padding(padding: EdgeInsets.all(50),)
+                Text("Powered By"),
+                Text(
+                  "EVOLABS",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(50),
+                )
               ],
             ),
           ),
-
         ],
       ),
     );

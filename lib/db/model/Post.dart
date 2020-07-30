@@ -5,6 +5,7 @@ class Post extends DBModel {
   String name;
   DocumentReference user;
   String photo;
+  String docId;
 
   Post({
     DocumentReference ref,
