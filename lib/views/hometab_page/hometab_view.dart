@@ -40,9 +40,6 @@ class _HomeTabViewState extends State<HomeTabView> {
 //    final rootBloc = BlocProvider.of<RootPageBloc>(context);
     log.d("Loading HomeTab View");
 
-//    hometabBloc.add(LoadStoriesEvent());
-//    hometabBloc.add(LoadPostsEvent());
-
     CustomSnackBar customSnackBar;
     final scaffold = Scaffold(
       appBar: AppBar(
@@ -171,14 +168,14 @@ class _HomeTabViewState extends State<HomeTabView> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: StreamBuilder<QuerySnapshot>(
-          stream: _postsRepository.getStoriesStream(),
+          stream: _postsRepository.getPostsStream(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List<Post> posts = new List();
               posts = snapshot.data.documents
                   .map((doc) => _postsRepository.fromSnapshot(doc))
                   .toList();
-              if(posts!=null && posts.length!=0){
+              if (posts != null && posts.length != 0) {
                 List<Widget> cards = new List();
                 for (Post p in posts) {
                   cards.add(post(p));
@@ -186,10 +183,9 @@ class _HomeTabViewState extends State<HomeTabView> {
                 return Column(
                   children: cards,
                 );
-              }else{
+              } else {
                 return Center(child: Text("No Posts Here..."));
               }
-
             } else {
               return Center(child: Text("No Posts..."));
             }
@@ -207,7 +203,29 @@ class _HomeTabViewState extends State<HomeTabView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(post.name),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Row(
+                  children: <Widget>[
+                    InkWell(
+                      child: Container(
+                        decoration: new BoxDecoration(
+                          color: Colors.grey[300],
+                          border:
+                              new Border.all(color: Colors.black, width: 2.0),
+                          borderRadius: new BorderRadius.circular(20.0),
+                        ),
+                        height: 30,
+                        width: 30,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(post.namename),
+                    ),
+                  ],
+                ),
+              ),
               Container(
                 height: 300,
                 decoration: new BoxDecoration(
@@ -236,6 +254,38 @@ class _HomeTabViewState extends State<HomeTabView> {
 //              ],
 //            ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        InkWell(
+                          child: Icon(Icons.highlight),
+                        ),
+                        Text("Like"),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        InkWell(
+                          child: Icon(Icons.comment),
+                        ),
+                        Text("Comment"),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        InkWell(
+                          child: Icon(Icons.screen_share),
+                        ),
+                        Text("Share"),
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         ),

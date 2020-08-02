@@ -11,7 +11,7 @@ void main() {
 class WhereTo extends StatelessWidget {
   static final materialApp = MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: "WHERETO",
+    title: "Gistoncampus",
     theme: ThemeData(
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,

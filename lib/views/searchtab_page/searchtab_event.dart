@@ -8,3 +8,5 @@ class ErrorEvent extends SearchTabEvent {
 
   ErrorEvent(this.error);
 }
+
+

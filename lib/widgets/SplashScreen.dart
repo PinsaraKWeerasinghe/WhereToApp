@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:whereto/theme/styled_colors.dart';
 import 'package:whereto/util/assets.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: StyledColors.APP_BACKGROUND,
       body: Stack(
         children: [
           Center(
@@ -25,13 +27,16 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                Text("Powered By"),
+                Text(
+                  "Powered By",
+                  style: TextStyle(fontSize: 10,),
+                ),
                 Text(
                   "EVOLABS",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(50),
+                  padding: EdgeInsets.all(30),
                 )
               ],
             ),

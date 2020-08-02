@@ -8,11 +8,3 @@ class ErrorEvent extends HomeTabEvent {
 
   ErrorEvent(this.error);
 }
-
-class LoadStoriesEvent extends HomeTabEvent {
-  LoadStoriesEvent();
-}
-
-class LoadPostsEvent extends HomeTabEvent {
-  LoadPostsEvent();
-}

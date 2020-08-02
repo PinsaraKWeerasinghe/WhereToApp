@@ -27,9 +27,9 @@ class Authentication {
     return result.user.email.split("@")[0];
   }
 
-  Future<String> register(String phone, String password) async {
+  Future<String> register(String name, String username, String email, String password) async {
     final AuthResult result = await _auth.createUserWithEmailAndPassword(
-      email: phone + '@email.com',
+      email:email,
       password: password,
     );
     return result.user.email.split("@")[0];
@@ -42,6 +42,6 @@ class Authentication {
   Future<String> getLoggedUserTelephone() async {
     final FirebaseUser user = await _auth.currentUser();
     if (user == null) return null;
-    return user.email.split("@")[0];
+    return user.email;
   }
 }

@@ -57,9 +57,9 @@ class RootView extends StatelessWidget {
   }
 
   Future<void> getUserName(RootBloc rootBloc) async {
-    final phone = await Authentication().getLoggedUserTelephone();
-    if (phone != null) {
-      rootBloc.add(InitialUserEvent(phone));
+    final email = await Authentication().getLoggedUserTelephone();
+    if (email != null) {
+      rootBloc.add(InitialUserEvent(email));
     }else{
       rootBloc.add(LogInEvent());
     }

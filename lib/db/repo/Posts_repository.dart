@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
 import 'package:whereto/util/db_util.dart';
@@ -24,23 +27,37 @@ class PostsRepository implements FirebaseRepositoryI<Post> {
     if (data == null) return null;
     Post post = new Post();
     post.docId = snapshot.documentID;
-    post.user = data["user"];
-    post.name = data["name"];
+    post.namename = data["username"];
     post.photo = data["photo_url"];
     return post;
   }
 
-  Future<Post> getStory(String documentID) async {
+  Future<Post> getPost(String documentID) async {
     return fromSnapshot(await Firestore.instance
         .collection(DBUtil.POSTS)
         .document(documentID)
         .get());
   }
 
-  Stream<QuerySnapshot> getStoriesStream(){
-    return Firestore.instance
-        .collection(DBUtil.POSTS)
-        .snapshots();
+  Stream<QuerySnapshot> getPostsStream() {
+    return Firestore.instance.collection(DBUtil.POSTS).snapshots();
+  }
+
+  Future<String> uploadImageForPost(String path) async {
+    String imageName = path
+        .substring(path.lastIndexOf("/"), path.lastIndexOf("."))
+        .replaceAll("/", "");
+
+    StorageTaskSnapshot snapshot = await FirebaseStorage.instance
+        .ref()
+        .child("/Posts/Photos/$imageName")
+        .putFile(File(path))
+        .onComplete;
+    if (snapshot.error == null) {
+      return await snapshot.ref.getDownloadURL();
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -65,4 +82,20 @@ class PostsRepository implements FirebaseRepositoryI<Post> {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  Future<void> updatePostToDB(
+      String placeName,
+      String description,
+      String downloadURL,
+      String username,
+      ) async {
+    Firestore.instance.collection("Posts").add({
+      "place_name":placeName,
+      "description":description,
+      "photo_url": downloadURL,
+      "username": username,
+    });
+  }
+
+
 }

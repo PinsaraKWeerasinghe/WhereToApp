@@ -4,12 +4,13 @@ import 'package:logger/logger.dart';
 import 'package:whereto/theme/styled_colors.dart';
 import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/home_page/home_page.dart';
-import 'package:whereto/views/login_page/login_event.dart';
-import 'package:whereto/views/whereto_app_bloc.dart';
+import 'package:whereto/views/register_page/register_provider.dart';
 import 'package:whereto/views/whereto_app_event.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
+import '../whereto_app_page.dart';
 import 'login_bloc.dart';
+import 'login_page.dart';
 import 'login_state.dart';
 
 // ignore: must_be_immutable
@@ -17,11 +18,9 @@ class LoginView extends StatelessWidget {
   final log = Logger();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   CustomSnackBar _customSnackBar;
   LoginBloc _loginBloc;
   WhereToAppBloc _appBloc;
-
   static final loadingWidget = Center(
     child: CircularProgressIndicator(),
   );
@@ -29,13 +28,13 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _loginBloc = BlocProvider.of<LoginBloc>(context);
-    _appBloc=BlocProvider.of<WhereToAppBloc>(context);
+    _appBloc = BlocProvider.of<WhereToAppBloc>(context);
 //    final rootBloc = BlocProvider.of<RootPageBloc>(context);
     log.d("Loading Login View");
 
-    _customSnackBar = CustomSnackBar(scaffoldKey: scaffoldKey);
+    _customSnackBar = CustomSnackBar(scaffoldState:Scaffold.of(context));
     final scaffold = Scaffold(
-      backgroundColor: Colors.purple[100],
+      backgroundColor: StyledColors.APP_BACKGROUND,
       body: BlocBuilder<LoginBloc, LoginState>(
           condition: (pre, current) => true,
           builder: (context, state) {
@@ -50,43 +49,35 @@ class LoginView extends StatelessWidget {
                         height: 50,
                       ),
                       SizedBox(
-                        height: 128,
-                        child: Image.asset(Assets.LOGO_GRAPHIC),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Text(
-                        "Login",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.w500),
+                        width: 128,
+                        child: Image.asset(Assets.ONLY_LOGO_GRAPHIC),
                       ),
                       SizedBox(
                         height: 50,
                       ),
                       SizedBox(
-                        height: 90,
+                        height: 60,
                         child: TextField(
-                          style: TextStyle(
-                            fontSize: 22,
-                          ),
+                          style: TextStyle(fontSize: 20, color: Colors.black),
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                                EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
                             border: InputBorder.none,
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(
+                                    color: StyledColors.PRIMARY_COLOR)),
                             hintStyle: TextStyle(
                               fontSize: 20,
                               color: Colors.black,
                             ),
-                            labelText:
-                            "Email",
+                            labelText: "Email",
                             labelStyle: TextStyle(
                               fontSize: 20,
                             ),
-                            helperText:
-                            'Enter Email Address',
                             helperStyle: TextStyle(
                               fontSize: 15,
                             ),
@@ -94,33 +85,33 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 25,
-                      ),
-                      SizedBox(
-                        height: 80,
+                        height: 60,
                         child: TextField(
                           onTap: () {},
                           style: TextStyle(
                             fontSize: 22,
                             color: Colors.black,
                           ),
-//                          obscureText: _loginFormBloc.state.showPassword,
+                          obscureText: !_loginBloc.state.showPassword,
                           keyboardType: TextInputType.text,
                           controller: _passwordController,
                           decoration: InputDecoration(
                             contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                                EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
                             border: InputBorder.none,
-                            labelText:
-                            "Password",
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.0)),
+                                borderSide: BorderSide(
+                                    color: StyledColors.PRIMARY_COLOR)),
+                            labelText: "Password",
                             labelStyle: TextStyle(
                               fontSize: 20,
                             ),
                             suffixIcon: GestureDetector(
                               onTap: _onTogglePassword,
                               child: Icon(
-//                                _loginFormBloc.state.showPassword
-                              true
+                                _loginBloc.state.showPassword
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                               ),
@@ -135,11 +126,11 @@ class LoginView extends StatelessWidget {
                         width: double.infinity,
                         child: RaisedButton(
                           color: StyledColors.PRIMARY_COLOR,
-                          onPressed: _onLoginPressed,
+                          onPressed: ()=>_onLoginPressed(context),
                           child: Text(
-                            "Login",
+                            "Log In",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: StyledColors.BUTTON_TEXT_PRIMARY,
                             ),
                           ),
@@ -151,11 +142,14 @@ class LoginView extends StatelessWidget {
                       SizedBox(
                         width: double.infinity,
                         child: FlatButton(
-                          onPressed: _onRegisterPressed,
+                          color: StyledColors.primaryColor(0.1),
+                          onPressed: (){
+                            _onRegisterPressed(context);
+                          },
                           child: Text(
-                            "Register",
+                            "Create an account",
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 14,
                               color: StyledColors.PRIMARY_COLOR,
                             ),
                           ),
@@ -183,7 +177,7 @@ class LoginView extends StatelessWidget {
         ),
         BlocListener<LoginBloc, LoginState>(
             condition: (pre, current) =>
-            pre.email != current.email && current.email.isNotEmpty,
+                pre.email != current.email && current.email.isNotEmpty,
             listener: (context, state) {
               _customSnackBar.hideAll();
               _appBloc.add(UserLoggedEvent(state.email));
@@ -200,7 +194,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  _onLoginPressed() {
+  _onLoginPressed(BuildContext context) {
     _customSnackBar.showLoadingSnackBar();
     final phone = (_emailController.text ?? "").trim();
     final password = (_passwordController.text ?? "").trim();
@@ -211,18 +205,16 @@ class LoginView extends StatelessWidget {
     _loginBloc.add(UserLoginEvent(phone, password));
   }
 
-  _onRegisterPressed() {
-//    Navigator.push(
-//      context,
-//      MaterialPageRoute(
-//        builder: (context) => RegisterFormProvider(),
-//      ),
-//    );
+  _onRegisterPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RegisterProvider(),
+      ),
+    );
   }
 
   _onTogglePassword() {
-//    _loginFormBloc
-//        .add(ToggleShowPasswordEvent(!_loginFormBloc.state.showPassword));
+    _loginBloc.add(ToggleShowPasswordEvent(!_loginBloc.state.showPassword));
   }
-
 }

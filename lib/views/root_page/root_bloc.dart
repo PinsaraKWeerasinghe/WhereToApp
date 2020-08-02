@@ -12,8 +12,7 @@ import 'root_state.dart';
 
 class RootBloc extends Bloc<RootEvent, RootState> {
   static final log = Logger();
-  StreamSubscription _roleSubscription;
-  final userRepo = UserRepository();
+  final _userRepository = UserRepository();
 
   RootBloc(BuildContext context);
 
@@ -36,7 +35,16 @@ class RootBloc extends Bloc<RootEvent, RootState> {
         break;
       case InitialUserEvent:
         final email = (event as InitialUserEvent).email;
+        List<User> user = await _userRepository.querySingle(
+          specification: ComplexSpecification([
+            ComplexWhere(
+              "email",
+              isEqualTo: email,
+            )
+          ]),
+        );
         yield state.clone(
+          user: user[0],
           page: RootState.HOME_PAGE,
         );
         break;

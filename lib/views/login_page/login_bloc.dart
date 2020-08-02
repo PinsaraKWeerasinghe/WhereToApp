@@ -18,6 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginState get initialState => LoginState(
         error: '',
         email: '',
+        showPassword: false,
       );
 
   @override
@@ -30,12 +31,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.clone(error: error);
         break;
       case UserLoginEvent:
-        try{
+        try {
           final email = (event as UserLoginEvent).email;
           final password = (event as UserLoginEvent).password;
           await _authentication.login(email, password);
-          yield state.clone(email: email,error: '');
-        } catch(e){
+          yield state.clone(email: email, error: '');
+        } catch (e) {
           try {
             add(ErrorEvent((e is String)
                 ? e
@@ -44,6 +45,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             add(ErrorEvent("Something went wrong. Please try again !"));
           }
         }
+        break;
+      case ToggleShowPasswordEvent:
+        yield state.clone(
+            showPassword: (event as ToggleShowPasswordEvent).value);
         break;
     }
   }
@@ -64,7 +69,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     log.e('$e');
     try {
       add(ErrorEvent(
-        (e is String) ? e : (e.message ?? "Something went wrong. Please try again !"),
+        (e is String)
+            ? e
+            : (e.message ?? "Something went wrong. Please try again !"),
       ));
     } catch (e) {
       add(ErrorEvent("Something went wrong. Please try again !"));

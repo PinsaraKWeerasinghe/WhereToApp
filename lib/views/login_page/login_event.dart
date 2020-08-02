@@ -15,3 +15,9 @@ class UserLoginEvent extends LoginEvent {
 
   UserLoginEvent(this.email, this.password);
 }
+
+class ToggleShowPasswordEvent extends LoginEvent {
+  final bool value;
+
+  ToggleShowPasswordEvent(this.value);
+}

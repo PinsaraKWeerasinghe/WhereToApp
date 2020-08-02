@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class LoginState {
+class RegisterState {
   final String error;
-  final String email;
   final bool showPassword;
 
-  LoginState({
+  RegisterState({
     @required this.error,
-    @required this.email,
     @required this.showPassword,
   });
 
-  LoginState clone({
+  RegisterState clone({
     String error,
-    String email,
     bool showPassword,
   }) {
-    return LoginState(
+    return RegisterState(
       error: error ?? this.error,
-      email: email ?? this.email,
       showPassword: showPassword ?? this.showPassword,
     );
   }
