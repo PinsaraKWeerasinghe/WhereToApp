@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/db/authentication.dart';
-import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/home_page/home_page.dart';
 import 'package:whereto/views/login_page/login_bloc.dart';
 import 'package:whereto/views/login_page/login_page.dart';
@@ -60,7 +59,7 @@ class RootView extends StatelessWidget {
     final email = await Authentication().getLoggedUserTelephone();
     if (email != null) {
       rootBloc.add(InitialUserEvent(email));
-    }else{
+    } else {
       rootBloc.add(LogInEvent());
     }
   }

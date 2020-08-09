@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 @immutable
@@ -18,7 +16,7 @@ class NewPostTabState {
   }) {
     return NewPostTabState(
       error: error ?? this.error,
-      imagePath: imagePath??this.imagePath,
+      imagePath: imagePath ?? this.imagePath,
     );
   }
 }

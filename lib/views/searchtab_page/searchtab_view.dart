@@ -52,7 +52,7 @@ class SearchTabView extends StatelessWidget {
                       children: <Widget>[
                         // Button send image
                         Container(
-                          width: MediaQuery.of(context).size.width-60,
+                          width: MediaQuery.of(context).size.width - 60,
                           padding: EdgeInsets.only(left: 15),
                           child: TextField(
                             focusNode: _focusNodeText,
@@ -90,7 +90,7 @@ class SearchTabView extends StatelessWidget {
                                         Icons.search,
                                         color: Colors.white,
                                       )),
-                                  onTap: (){},
+                                  onTap: () {},
                                 ),
                               ),
                             ),
@@ -102,8 +102,7 @@ class SearchTabView extends StatelessWidget {
                   ),
                 ),
               ],
-            )
-            ;
+            );
           }),
     );
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/db/authentication.dart';
@@ -13,13 +12,14 @@ import 'register_state.dart';
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   static final log = Logger();
   final _authentication = Authentication();
-  final _userRepositery=UserRepository();
+  final _userRepositery = UserRepository();
+
   RegisterBloc(BuildContext context);
 
   @override
   RegisterState get initialState => RegisterState(
         error: '',
-    showPassword: false,
+        showPassword: false,
       );
 
   @override
@@ -32,16 +32,18 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         yield state.clone(error: error);
         break;
       case ToggleShowPasswordEvent:
-        yield state.clone(showPassword: (event as ToggleShowPasswordEvent).value);
+        yield state.clone(
+            showPassword: (event as ToggleShowPasswordEvent).value);
         break;
       case UserRegisterEvent:
         final name = (event as UserRegisterEvent).name;
         final username = (event as UserRegisterEvent).username;
         final email = (event as UserRegisterEvent).email;
         final password = (event as UserRegisterEvent).password;
-        _authentication.register(name,username,email,password).whenComplete((){
-          _userRepositery.registerUsers(name,username,email);
-
+        _authentication
+            .register(name, username, email, password)
+            .whenComplete(() {
+          _userRepositery.registerUsers(name, username, email);
         });
         break;
     }
@@ -63,7 +65,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     log.e('$e');
     try {
       add(ErrorEvent(
-        (e is String) ? e : (e.message ?? "Something went wrong. Please try again !"),
+        (e is String)
+            ? e
+            : (e.message ?? "Something went wrong. Please try again !"),
       ));
     } catch (e) {
       add(ErrorEvent("Something went wrong. Please try again !"));

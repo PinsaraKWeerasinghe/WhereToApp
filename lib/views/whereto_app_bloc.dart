@@ -13,10 +13,7 @@ class WhereToAppBloc extends Bloc<WhereToAppEvent, WhereToAppState> {
   WhereToAppBloc(BuildContext context);
 
   @override
-  WhereToAppState get initialState => WhereToAppState(
-        error: '',
-    email: ''
-      );
+  WhereToAppState get initialState => WhereToAppState(error: '', email: '');
 
   @override
   Stream<WhereToAppState> mapEventToState(WhereToAppEvent event) async* {
@@ -50,7 +47,9 @@ class WhereToAppBloc extends Bloc<WhereToAppEvent, WhereToAppState> {
     log.e('$e');
     try {
       add(ErrorEvent(
-        (e is String) ? e : (e.message ?? "Something went wrong. Please try again !"),
+        (e is String)
+            ? e
+            : (e.message ?? "Something went wrong. Please try again !"),
       ));
     } catch (e) {
       add(ErrorEvent("Something went wrong. Please try again !"));

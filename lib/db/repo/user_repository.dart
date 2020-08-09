@@ -24,31 +24,9 @@ class UserRepository extends FirebaseRepository<User> {
     user.name = data['name'] ?? "";
     user.email = data['email'];
     user.username = data['username'];
+    user.about = data['about'];
+    user.profilePicture = data['profile_picture'];
     return user;
-//    final data = snapshot.data;
-//    if (data == null) return null;
-//    if (data[User.TYPE_FIELD] == (Client).toString()) {
-//      return Client(
-//        (b) => b
-//          ..ref = snapshot.reference
-//          ..email = data[User.EMAIL_FIELD]
-//          ..name = data[User.NAME_FIELD]
-//          ..lastName = data[User.LAST_NAME_FIELD]
-//          ..code=data[Client.CODE]
-//          ..note=data[Client.NOTE]
-//          ..therapist = data[Client.THERAPIST],
-//      );
-//    } else if (data[User.TYPE_FIELD] == (Therapist).toString()) {
-//      return Therapist(
-//        (b) => b
-//          ..ref = snapshot.reference
-//          ..email = data[User.EMAIL_FIELD]
-//          ..name = data[User.NAME_FIELD]
-//          ..lastName = data[User.LAST_NAME_FIELD],
-//      );
-//      /*final therapist = serializers.deserializeWith(Therapist.serializer, data);
-//      return (therapist.toBuilder()..ref = snapshot.reference).build();*/
-//    }
   }
 
   @override
@@ -57,6 +35,7 @@ class UserRepository extends FirebaseRepository<User> {
       "email": user.email,
       "name": user.name,
       "username": user.username,
+      "about":user.about,
     };
     return data;
   }

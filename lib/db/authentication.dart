@@ -27,9 +27,10 @@ class Authentication {
     return result.user.email.split("@")[0];
   }
 
-  Future<String> register(String name, String username, String email, String password) async {
+  Future<String> register(
+      String name, String username, String email, String password) async {
     final AuthResult result = await _auth.createUserWithEmailAndPassword(
-      email:email,
+      email: email,
       password: password,
     );
     return result.user.email.split("@")[0];

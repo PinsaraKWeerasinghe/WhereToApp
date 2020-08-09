@@ -4,6 +4,7 @@ import 'styled_colors.dart';
 
 abstract class PrimaryTheme {
   PrimaryTheme._();
+
   static ThemeData generateTheme() {
     return ThemeData(
       brightness: Brightness.light,

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whereto/db/model/Story.dart';
 import 'package:whereto/util/db_util.dart';
 
@@ -36,10 +39,8 @@ class StoriesRepository implements FirebaseRepositoryI<Story> {
         .get());
   }
 
-  Stream<QuerySnapshot> getStoriesStream(){
-    return Firestore.instance
-        .collection(DBUtil.STORIES)
-        .snapshots();
+  Stream<QuerySnapshot> getStoriesStream() {
+    return Firestore.instance.collection(DBUtil.STORIES).snapshots();
   }
 
   @override
@@ -64,4 +65,33 @@ class StoriesRepository implements FirebaseRepositoryI<Story> {
     // TODO: implement update
     throw UnimplementedError();
   }
+
+  Future<String> uploadImageForStory(String path) async {
+    String imageName = path
+        .substring(path.lastIndexOf("/"), path.lastIndexOf("."))
+        .replaceAll("/", "");
+
+    StorageTaskSnapshot snapshot = await FirebaseStorage.instance
+        .ref()
+        .child("/Stories/Photos/$imageName")
+        .putFile(File(path))
+        .onComplete;
+    if (snapshot.error == null) {
+      return await snapshot.ref.getDownloadURL();
+    } else {
+      return null;
+    }
+  }
+
+  Future<void> updateStoryToDB(
+      String downloadURL,
+      String username,
+      ) async {
+    Firestore.instance.collection("Stories").add({
+      "photo_url": downloadURL,
+      "username": username,
+    });
+  }
+
+
 }

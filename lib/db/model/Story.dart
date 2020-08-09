@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcode_bloc/fcode_bloc.dart';
 
-class Story extends DBModel {
+class   Story extends DBModel {
   String docId;
   String name;
   DocumentReference user;
@@ -18,12 +18,6 @@ class Story extends DBModel {
 
   @override
   Story clone() {
-    return Story(
-      ref: ref,
-      name: name,
-      user: user,
-      photo: photo,
-      type: type
-    );
+    return Story(ref: ref, name: name, user: user, photo: photo, type: type);
   }
 }

@@ -9,17 +9,21 @@ class ErrorEvent extends RootEvent {
 
   ErrorEvent(this.error);
 }
-class InitialEvent extends RootEvent{}
-class LogOutEvent extends RootEvent{}
 
-class LogInEvent extends RootEvent{}
+class InitialEvent extends RootEvent {}
 
-class ChangeUser extends RootEvent{
+class LogOutEvent extends RootEvent {}
+
+class LogInEvent extends RootEvent {}
+
+class ChangeUser extends RootEvent {
   final User user;
+
   ChangeUser(this.user);
 }
 
-class InitialUserEvent extends RootEvent{
+class InitialUserEvent extends RootEvent {
   final String email;
+
   InitialUserEvent(this.email);
 }

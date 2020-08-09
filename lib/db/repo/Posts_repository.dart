@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:whereto/db/model/Post.dart';
-import 'package:whereto/db/model/Story.dart';
 import 'package:whereto/util/db_util.dart';
 
 import 'firebase_repository.dart';
@@ -27,8 +26,9 @@ class PostsRepository implements FirebaseRepositoryI<Post> {
     if (data == null) return null;
     Post post = new Post();
     post.docId = snapshot.documentID;
-    post.namename = data["username"];
+    post.name = data["username"];
     post.photo = data["photo_url"];
+    post.description=data["description"];
     return post;
   }
 
@@ -84,18 +84,16 @@ class PostsRepository implements FirebaseRepositoryI<Post> {
   }
 
   Future<void> updatePostToDB(
-      String placeName,
-      String description,
-      String downloadURL,
-      String username,
-      ) async {
+    String placeName,
+    String description,
+    String downloadURL,
+    String username,
+  ) async {
     Firestore.instance.collection("Posts").add({
-      "place_name":placeName,
-      "description":description,
+      "place_name": placeName,
+      "description": description,
       "photo_url": downloadURL,
       "username": username,
     });
   }
-
-
 }

@@ -8,8 +8,7 @@ class StyledColors {
   static const APP_BAR_TEXT = const Color(0xff020202);
   static const NAVIGATION_BAR_ICON_INACTIVE = Color(0x66000000);
 
-  static Color primaryColor(double opacity){
+  static Color primaryColor(double opacity) {
     return Color.fromRGBO(102, 0, 153, opacity);
   }
-
 }

@@ -32,7 +32,7 @@ class LoginView extends StatelessWidget {
 //    final rootBloc = BlocProvider.of<RootPageBloc>(context);
     log.d("Loading Login View");
 
-    _customSnackBar = CustomSnackBar(scaffoldState:Scaffold.of(context));
+    _customSnackBar = CustomSnackBar(scaffoldState: Scaffold.of(context));
     final scaffold = Scaffold(
       backgroundColor: StyledColors.APP_BACKGROUND,
       body: BlocBuilder<LoginBloc, LoginState>(
@@ -126,7 +126,7 @@ class LoginView extends StatelessWidget {
                         width: double.infinity,
                         child: RaisedButton(
                           color: StyledColors.PRIMARY_COLOR,
-                          onPressed: ()=>_onLoginPressed(context),
+                          onPressed: () => _onLoginPressed(context),
                           child: Text(
                             "Log In",
                             style: TextStyle(
@@ -143,7 +143,7 @@ class LoginView extends StatelessWidget {
                         width: double.infinity,
                         child: FlatButton(
                           color: StyledColors.primaryColor(0.1),
-                          onPressed: (){
+                          onPressed: () {
                             _onRegisterPressed(context);
                           },
                           child: Text(

@@ -19,8 +19,7 @@ class HomeView extends StatefulWidget {
   State<StatefulWidget> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView>
-    with TickerProviderStateMixin {
+class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   final log = Logger();
   Widget _homeTab;
   Widget _searchTab;
@@ -52,6 +51,7 @@ class _HomeViewState extends State<HomeView>
 
   @override
   void dispose() {
+    super.dispose();
     _tabController.dispose();
   }
 

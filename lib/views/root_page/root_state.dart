@@ -3,9 +3,9 @@ import 'package:whereto/db/model/user.dart';
 
 @immutable
 class RootState {
-  static const LOADING_PAGE=1;
-  static const LOGIN_PAGE=2;
-  static const HOME_PAGE=3;
+  static const LOADING_PAGE = 1;
+  static const LOGIN_PAGE = 2;
+  static const HOME_PAGE = 3;
 
   final int page;
   final String error;

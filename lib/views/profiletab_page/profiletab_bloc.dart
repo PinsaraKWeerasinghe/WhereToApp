@@ -45,7 +45,9 @@ class ProfileTabBloc extends Bloc<ProfileTabEvent, ProfileTabState> {
     log.e('$e');
     try {
       add(ErrorEvent(
-        (e is String) ? e : (e.message ?? "Something went wrong. Please try again !"),
+        (e is String)
+            ? e
+            : (e.message ?? "Something went wrong. Please try again !"),
       ));
     } catch (e) {
       add(ErrorEvent("Something went wrong. Please try again !"));

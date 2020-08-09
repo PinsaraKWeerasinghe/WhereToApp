@@ -29,7 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
               children: <Widget>[
                 Text(
                   "Powered By",
-                  style: TextStyle(fontSize: 10,),
+                  style: TextStyle(
+                    fontSize: 10,
+                  ),
                 ),
                 Text(
                   "EVOLABS",

@@ -1,29 +1,31 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:whereto/db/repo/Posts_repository.dart';
+import 'package:whereto/db/repo/Stories_repository.dart';
 
-import 'newposttab_event.dart';
-import 'newposttab_state.dart';
+import 'newstory_event.dart';
+import 'newstory_state.dart';
 
-class NewPostTabBloc extends Bloc<NewPostTabEvent, NewPostTabState> {
+class NewStoryBloc extends Bloc<NewStoryEvent, NewStoryState> {
   static final log = Logger();
+  final StoriesRepository _storiesRepository = new StoriesRepository();
   final picker = ImagePicker();
-  final _postsRepository = PostsRepository();
 
-  NewPostTabBloc(BuildContext context);
+  NewStoryBloc(BuildContext context);
 
   @override
-  NewPostTabState get initialState => NewPostTabState(
+  NewStoryState get initialState => NewStoryState(
         error: '',
-        imagePath: null,
+    storyImagePath: null,
+    successfulPublish: false,
       );
 
   @override
-  Stream<NewPostTabState> mapEventToState(NewPostTabEvent event) async* {
+  Stream<NewStoryState> mapEventToState(NewStoryEvent event) async* {
     switch (event.runtimeType) {
       case ErrorEvent:
         final error = (event as ErrorEvent).error;
@@ -31,20 +33,17 @@ class NewPostTabBloc extends Bloc<NewPostTabEvent, NewPostTabState> {
         yield state.clone(error: "");
         yield state.clone(error: error);
         break;
-
-      case TakeImageEvent:
+      case TakeStoryImageEvent:
         String _imagePath = await _takeImage();
-        yield state.clone(imagePath: _imagePath);
+        yield state.clone(storyImagePath: _imagePath);
         break;
-      case PostPublishEvent:
-        final placeName = (event as PostPublishEvent).placeName;
-        final description = (event as PostPublishEvent).description;
-        final image = (event as PostPublishEvent).image;
-        final username = ((event as PostPublishEvent)).username;
-        String downloadURL = await _postsRepository.uploadImageForPost(image);
-        await _postsRepository.updatePostToDB(
-            placeName, description, downloadURL, username);
-        yield state.clone();
+      case StoryPublishEvent:
+        final image = (event as StoryPublishEvent).image;
+        final username = ((event as StoryPublishEvent)).username;
+        String downloadURL =
+            await _storiesRepository.uploadImageForStory(image);
+        await _storiesRepository.updateStoryToDB(downloadURL, username);
+        yield state.clone(successfulPublish: true);
         break;
     }
   }

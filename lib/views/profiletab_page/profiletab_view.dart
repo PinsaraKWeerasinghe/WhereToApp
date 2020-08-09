@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/util/assets.dart';
+import 'package:whereto/views/root_page/root_page.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
 import 'profiletab_bloc.dart';
@@ -17,7 +20,7 @@ class ProfileTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profiletabBloc = BlocProvider.of<ProfileTabBloc>(context);
-//    final rootBloc = BlocProvider.of<RootPageBloc>(context);
+    final rootBloc = BlocProvider.of<RootBloc>(context);
     log.d("Loading ProfileTab View");
 
     CustomSnackBar customSnackBar;
@@ -28,7 +31,7 @@ class ProfileTabView extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Color(0xfff6f6f6),
         title: Text(
-          "Profile",
+          rootBloc.state.user.username,
           style: TextStyle(fontFamily: 'Raleway', color: Colors.black),
         ),
       ),
@@ -41,7 +44,9 @@ class ProfileTabView extends StatelessWidget {
               margin: EdgeInsets.all(30),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(Assets.proPic),
+                    image: (rootBloc.state.user.profilePicture != null)
+                        ? NetworkImage(rootBloc.state.user.profilePicture)
+                        : AssetImage(Assets.proPic),
                     fit: BoxFit.cover,
                   ),
                   color: Colors.white10,
@@ -49,12 +54,15 @@ class ProfileTabView extends StatelessWidget {
             ),
           ),
           Text(
-            "Steewan Smith",
+            rootBloc.state.user.name,
             style: TextStyle(
                 fontFamily: 'Raleway', color: Colors.black, fontSize: 20),
           ),
-          Padding(padding: EdgeInsets.all(10)),
-          Text("Hi there! this is status."),
+//          Padding(padding: EdgeInsets.all(10)),
+          Text(
+            rootBloc.state.user.about ?? "",
+            maxLines: 4,
+          ),
           Padding(padding: EdgeInsets.all(10)),
           Expanded(
             child: Container(

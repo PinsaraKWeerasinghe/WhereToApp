@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 
 @immutable
@@ -20,5 +18,6 @@ class PostPublishEvent extends NewPostTabEvent {
   final String description;
   final String image;
   final String username;
-  PostPublishEvent(this.placeName,this.description,this.image, this.username);
+
+  PostPublishEvent(this.placeName, this.description, this.image, this.username);
 }

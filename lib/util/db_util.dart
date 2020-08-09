@@ -1,6 +1,4 @@
-
-
-class DBUtil{
+class DBUtil {
   static const USER = 'Users';
   static const TEMPLATE = 'Template';
   static const REWARD = 'Reward';
@@ -10,5 +8,5 @@ class DBUtil{
   static const COMPLETED_ACTIVITY = 'CompletedActivity';
   static const ASSIGNED_ACTIVITY = 'AssignedActivity';
   static const STORIES = 'Stories';
-  static const POSTS='Posts';
+  static const POSTS = 'Posts';
 }

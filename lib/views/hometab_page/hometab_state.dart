@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
@@ -18,6 +17,7 @@ class HomeTabState {
   HomeTabState clone({
     String error,
     List<Story> stories,
+    String storyImagePath,
     List<Post> posts,
   }) {
     return HomeTabState(

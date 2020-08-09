@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +10,13 @@ import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
 import 'package:whereto/db/repo/Posts_repository.dart';
 import 'package:whereto/db/repo/Stories_repository.dart';
+import 'package:whereto/theme/styled_colors.dart';
 import 'package:whereto/util/assets.dart';
 import 'package:whereto/views/hometab_page/hometab_event.dart';
+import 'package:whereto/views/newstory_page/newstory_bloc.dart';
+import 'package:whereto/views/newstory_page/newstory_page.dart';
+import 'package:whereto/views/newstory_page/newstory_view.dart';
+import 'package:whereto/views/root_page/root_bloc.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
 import 'hometab_bloc.dart';
@@ -22,8 +29,11 @@ class HomeTabView extends StatefulWidget {
 
 class _HomeTabViewState extends State<HomeTabView> {
   final log = Logger();
+  RootBloc _rootBloc;
+  HomeTabBloc _hometabBloc;
   final StoriesRepository _storiesRepository = new StoriesRepository();
   final PostsRepository _postsRepository = new PostsRepository();
+
   static final loadingWidget = Center(
     child: CircularProgressIndicator(),
   );
@@ -35,9 +45,8 @@ class _HomeTabViewState extends State<HomeTabView> {
 
   @override
   Widget build(BuildContext context) {
-    final hometabBloc = BlocProvider.of<HomeTabBloc>(context);
-
-//    final rootBloc = BlocProvider.of<RootPageBloc>(context);
+    _hometabBloc = BlocProvider.of<HomeTabBloc>(context);
+    _rootBloc = BlocProvider.of<RootBloc>(context);
     log.d("Loading HomeTab View");
 
     CustomSnackBar customSnackBar;
@@ -47,15 +56,11 @@ class _HomeTabViewState extends State<HomeTabView> {
         brightness: Brightness.light,
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Color(0xfff6f6f6),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Image.asset(
-              Assets.APP_NAME_GRAPHIC,
-              width: MediaQuery.of(context).size.width - 200,
-            ),
-            IconButton(icon: Icon(Icons.camera_alt), onPressed: null)
-          ],
+        title: Center(
+          child: Image.asset(
+            Assets.APP_NAME_GRAPHIC,
+            width: MediaQuery.of(context).size.width - 200,
+          ),
         ),
       ),
       body: BlocBuilder<HomeTabBloc, HomeTabState>(
@@ -102,12 +107,63 @@ class _HomeTabViewState extends State<HomeTabView> {
           child: StreamBuilder<QuerySnapshot>(
               stream: _storiesRepository.getStoriesStream(),
               builder: (context, snapshot) {
+                List<Widget> cards = new List();
+
+                cards.add(SafeArea(
+                  top: true,
+                  bottom: true,
+                  child: new Container(
+                    padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                    child: new SizedBox(
+                      width: 50,
+                      child: new Container(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Icon(
+                                  Icons.add_circle_outline,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NewStoryProvider(),
+                                    ),
+                                  );
+                                },
+                              )
+                            ]),
+                        decoration: new BoxDecoration(
+                          image: DecorationImage(
+                            image: (_rootBloc.state.user.profilePicture != null)
+                                ? NetworkImage(
+                                    _rootBloc.state.user.profilePicture)
+                                : AssetImage(Assets.proPic),
+                            fit: BoxFit.cover,
+                          ),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0),
+//                          boxShadow: [
+//                            BoxShadow(
+//                              color: Colors.grey[300],
+//                              blurRadius: 10.0,
+//                              spreadRadius: 6.0,
+//                              offset: Offset(0, 3),
+//                            )
+//                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ));
                 if (snapshot.hasData) {
                   List<Story> stories = new List();
                   stories = snapshot.data.documents
                       .map((doc) => _storiesRepository.fromSnapshot(doc))
                       .toList();
-                  List<Widget> cards = new List();
                   for (Story s in stories) {
                     cards.add(story(s));
                   }
@@ -139,14 +195,14 @@ class _HomeTabViewState extends State<HomeTabView> {
               ),
               color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[300],
-                  blurRadius: 10.0,
-                  spreadRadius: 6.0,
-                  offset: Offset(0, 3),
-                )
-              ],
+//              boxShadow: [
+//                BoxShadow(
+//                  color: Colors.grey[300],
+//                  blurRadius: 10.0,
+//                  spreadRadius: 6.0,
+//                  offset: Offset(0, 3),
+//                )
+//              ],
             ),
 //            child: new Stack(
 //              children: <Widget>[
@@ -209,23 +265,42 @@ class _HomeTabViewState extends State<HomeTabView> {
                   children: <Widget>[
                     InkWell(
                       child: Container(
-                        decoration: new BoxDecoration(
-                          color: Colors.grey[300],
-                          border:
-                              new Border.all(color: Colors.black, width: 2.0),
-                          borderRadius: new BorderRadius.circular(20.0),
-                        ),
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  (_rootBloc.state.user.profilePicture != null)
+                                      ? NetworkImage(
+                                          _rootBloc.state.user.profilePicture)
+                                      : AssetImage(Assets.proPic),
+                              fit: BoxFit.cover,
+                            ),
+                            color: Colors.white10,
+                            shape: BoxShape.circle,
+                            border:
+                                Border.all(color: Colors.black, width: 2.0)),
                         height: 30,
                         width: 30,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
-                      child: Text(post.namename),
+                      child: Text(post.name),
                     ),
                   ],
                 ),
               ),
+              (post.description != null)
+                  ? Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, bottom: 10, top: 10, right: 10),
+                      child: Text(
+                        post.description,
+                        maxLines: 4,
+                      ),
+                    )
+                  : SizedBox(
+                      height: 10,
+                    ),
               Container(
                 height: 300,
                 decoration: new BoxDecoration(
@@ -291,9 +366,5 @@ class _HomeTabViewState extends State<HomeTabView> {
         ),
       ),
     );
-  }
-
-  logout() {
-    Authentication().logout();
   }
 }

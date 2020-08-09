@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:whereto/db/authentication.dart';
 import 'package:whereto/db/model/user.dart';
 import 'package:whereto/db/repo/user_repository.dart';
 
@@ -13,7 +14,7 @@ import 'root_state.dart';
 class RootBloc extends Bloc<RootEvent, RootState> {
   static final log = Logger();
   final _userRepository = UserRepository();
-
+final _authentication=Authentication();
   RootBloc(BuildContext context);
 
   @override
@@ -43,6 +44,10 @@ class RootBloc extends Bloc<RootEvent, RootState> {
             )
           ]),
         );
+        if(user.length==0){
+          _authentication.logout();
+          break;
+        }
         yield state.clone(
           user: user[0],
           page: RootState.HOME_PAGE,

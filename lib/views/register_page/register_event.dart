@@ -15,12 +15,11 @@ class ToggleShowPasswordEvent extends RegisterEvent {
   ToggleShowPasswordEvent(this.value);
 }
 
-class UserRegisterEvent extends RegisterEvent{
+class UserRegisterEvent extends RegisterEvent {
   final String name;
   final String username;
   final String password;
   final String email;
 
   UserRegisterEvent(this.name, this.username, this.password, this.email);
-
 }
