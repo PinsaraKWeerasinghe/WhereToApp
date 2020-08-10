@@ -29,6 +29,8 @@ class StoriesRepository implements FirebaseRepositoryI<Story> {
     story.user = data["user"];
     story.photo = data["photo_url"];
     story.type = data["type"];
+    story.city=data["city"];
+    story.description=data["description"];
     return story;
   }
 
@@ -84,14 +86,16 @@ class StoriesRepository implements FirebaseRepositoryI<Story> {
   }
 
   Future<void> updateStoryToDB(
-      String downloadURL,
-      String username,
-      ) async {
+    String downloadURL,
+    String description,
+    String username,
+    String city,
+  ) async {
     Firestore.instance.collection("Stories").add({
       "photo_url": downloadURL,
+      "description":description,
       "username": username,
+      "city": city,
     });
   }
-
-
 }

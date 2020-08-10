@@ -12,11 +12,8 @@ class NewStoryState {
     @required this.successfulPublish,
   });
 
-  NewStoryState clone({
-    String error,
-    String storyImagePath,
-    bool successfulPublish
-  }) {
+  NewStoryState clone(
+      {String error, String storyImagePath, bool successfulPublish}) {
     return NewStoryState(
       error: error ?? this.error,
       storyImagePath: storyImagePath ?? this.storyImagePath,

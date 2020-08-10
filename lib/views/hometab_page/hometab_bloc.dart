@@ -2,17 +2,13 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
-import 'package:whereto/db/model/Story.dart';
-import 'package:whereto/db/repo/Stories_repository.dart';
 
 import 'hometab_event.dart';
 import 'hometab_state.dart';
 
 class HomeTabBloc extends Bloc<HomeTabEvent, HomeTabState> {
   static final log = Logger();
-
 
   HomeTabBloc(BuildContext context);
 
@@ -32,7 +28,6 @@ class HomeTabBloc extends Bloc<HomeTabEvent, HomeTabState> {
         yield state.clone(error: "");
         yield state.clone(error: error);
         break;
-
     }
   }
 
@@ -60,7 +55,4 @@ class HomeTabBloc extends Bloc<HomeTabEvent, HomeTabState> {
       add(ErrorEvent("Something went wrong. Please try again !"));
     }
   }
-
-
-
 }

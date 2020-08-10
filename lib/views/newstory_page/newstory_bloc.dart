@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
@@ -20,8 +19,8 @@ class NewStoryBloc extends Bloc<NewStoryEvent, NewStoryState> {
   @override
   NewStoryState get initialState => NewStoryState(
         error: '',
-    storyImagePath: null,
-    successfulPublish: false,
+        storyImagePath: null,
+        successfulPublish: false,
       );
 
   @override
@@ -34,16 +33,28 @@ class NewStoryBloc extends Bloc<NewStoryEvent, NewStoryState> {
         yield state.clone(error: error);
         break;
       case TakeStoryImageEvent:
-        String _imagePath = await _takeImage();
+        final enableCamera = (event as TakeStoryImageEvent).enableCamera;
+        String _imagePath;
+        if(enableCamera){
+          _imagePath = await _takeImageFromCamera();
+        }else{
+          _imagePath = await _takeImageFromGallery();
+        }
+
         yield state.clone(storyImagePath: _imagePath);
         break;
       case StoryPublishEvent:
         final image = (event as StoryPublishEvent).image;
+        final description = (event as StoryPublishEvent).description;
         final username = ((event as StoryPublishEvent)).username;
+        final city = ((event as StoryPublishEvent)).city;
         String downloadURL =
             await _storiesRepository.uploadImageForStory(image);
-        await _storiesRepository.updateStoryToDB(downloadURL, username);
+        await _storiesRepository.updateStoryToDB(downloadURL,description,username,city);
         yield state.clone(successfulPublish: true);
+        break;
+      case DeleteImageEvent:
+        yield state.clone(storyImagePath: null);
         break;
     }
   }
@@ -73,8 +84,14 @@ class NewStoryBloc extends Bloc<NewStoryEvent, NewStoryState> {
     }
   }
 
-  Future<String> _takeImage() async {
+  Future<String> _takeImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     return pickedFile.path;
   }
+
+  Future<String> _takeImageFromGallery() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    return pickedFile.path;
+  }
+
 }

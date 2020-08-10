@@ -20,6 +20,7 @@ class NewPostTabBloc extends Bloc<NewPostTabEvent, NewPostTabState> {
   NewPostTabState get initialState => NewPostTabState(
         error: '',
         imagePath: null,
+        successfulPublish: false,
       );
 
   @override
@@ -44,7 +45,7 @@ class NewPostTabBloc extends Bloc<NewPostTabEvent, NewPostTabState> {
         String downloadURL = await _postsRepository.uploadImageForPost(image);
         await _postsRepository.updatePostToDB(
             placeName, description, downloadURL, username);
-        yield state.clone();
+        yield state.clone(successfulPublish: true);
         break;
     }
   }

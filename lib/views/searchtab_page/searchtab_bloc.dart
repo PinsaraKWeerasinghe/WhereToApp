@@ -3,18 +3,23 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:whereto/db/repo/user_repository.dart';
 
 import 'searchtab_event.dart';
 import 'searchtab_state.dart';
 
 class SearchTabBloc extends Bloc<SearchTabEvent, SearchTabState> {
   static final log = Logger();
+  StreamSubscription previousSubscription;
+  UserRepository _userRepository = new UserRepository();
 
   SearchTabBloc(BuildContext context);
 
   @override
   SearchTabState get initialState => SearchTabState(
         error: '',
+        user: null,
+        showProfile: false,
       );
 
   @override
@@ -25,6 +30,11 @@ class SearchTabBloc extends Bloc<SearchTabEvent, SearchTabState> {
         log.e('Error: $error');
         yield state.clone(error: "");
         yield state.clone(error: error);
+        break;
+      case ShowProfileEvent:
+        final user = (event as ShowProfileEvent).user;
+        final showProfile = (event as ShowProfileEvent).showProfile;
+        yield state.clone(user: user, showProfile: showProfile);
         break;
     }
   }

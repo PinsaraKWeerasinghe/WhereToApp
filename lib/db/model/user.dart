@@ -6,7 +6,7 @@ class User extends DBModel {
   String username;
   String email;
   GeoPoint homeLocation;
-  String about;
+  String status;
   String profilePicture;
 
   User({
@@ -15,7 +15,7 @@ class User extends DBModel {
     this.username,
     this.email,
     this.homeLocation,
-    this.about,
+    this.status,
     this.profilePicture,
   }) : super(ref: ref);
 
@@ -27,8 +27,8 @@ class User extends DBModel {
       username: username,
       email: email,
       homeLocation: homeLocation,
-      about: about,
-        profilePicture: profilePicture,
+      status: status,
+      profilePicture: profilePicture,
     );
   }
 }

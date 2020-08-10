@@ -8,12 +8,23 @@ class ErrorEvent extends NewStoryEvent {
 
   ErrorEvent(this.error);
 }
+
+
 class TakeStoryImageEvent extends NewStoryEvent {
-  TakeStoryImageEvent();
+  final bool enableCamera;
+  TakeStoryImageEvent(this.enableCamera);
 }
+
+class DeleteImageEvent extends NewStoryEvent {
+
+  DeleteImageEvent();
+}
+
 class StoryPublishEvent extends NewStoryEvent {
   final String image;
+  final String description;
   final String username;
+  final String city;
 
-  StoryPublishEvent(this.image, this.username);
+  StoryPublishEvent(this.image,this.description, this.username,this.city);
 }

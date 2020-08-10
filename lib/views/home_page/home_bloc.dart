@@ -31,6 +31,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   @override
   void onError(Object error, StackTrace stacktrace) {
+    super.onError(error, stacktrace);
     log.e('$error');
     log.e('$stacktrace');
     _addErr(error);

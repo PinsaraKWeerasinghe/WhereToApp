@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fcode_bloc/fcode_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +15,9 @@ import 'newstory_state.dart';
 class NewStoryView extends StatelessWidget {
   final log = Logger();
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final TextEditingController _cityEditingController =
+      new TextEditingController();
+  final TextEditingController _storyController = new TextEditingController();
 
   static final loadingWidget = Center(
     child: CircularProgressIndicator(),
@@ -27,11 +29,10 @@ class NewStoryView extends StatelessWidget {
     final rootBloc = BlocProvider.of<RootBloc>(context);
     log.d("Loading NewStory View");
 
-    TextEditingController _storyController = new TextEditingController();
-
-    CustomSnackBar _customSnackBar = CustomSnackBar(scaffoldKey:scaffoldKey);
+    CustomSnackBar _customSnackBar = CustomSnackBar(scaffoldKey: scaffoldKey);
     final scaffold = Scaffold(
       key: scaffoldKey,
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         elevation: 2,
         brightness: Brightness.light,
@@ -43,98 +44,173 @@ class NewStoryView extends StatelessWidget {
         ),
       ),
       body: BlocBuilder<NewStoryBloc, NewStoryState>(
-          condition: (pre, current) => true,
-          builder: (context, state) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  (_newstoryBloc.state.storyImagePath == null)
-                      ? Material(
-                          color: Colors.transparent,
-                          child: TextField(
-                            textAlign: TextAlign.center,
-                            maxLines: 4,
-                            autofocus: true,
-                            controller: _storyController,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-                              border: InputBorder.none,
-                              hintStyle: TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                              ),
-                              hintText: "Add the place to share...",
-                            ),
+        condition: (pre, current) => true,
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 60,
+                      child: TextField(
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                        ),
+                        controller: _cityEditingController,
+                        obscureText: false,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          contentPadding:
+                              EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 15.0),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: StyledColors.PRIMARY_COLOR, width: 5.0),
                           ),
-                        )
-                      : Expanded(
-                          child: Container(
-                            decoration: new BoxDecoration(
-                              image: DecorationImage(
-                                image: FileImage(
-                                    File(_newstoryBloc.state.storyImagePath)),
-                                fit: BoxFit.cover,
-                              ),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5.0),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[300],
-                                  blurRadius: 10.0,
-                                  spreadRadius: 6.0,
-                                  offset: Offset(0, 3),
-                                )
-                              ],
-                            ),
+                          labelText: "City",
+                          labelStyle: TextStyle(
+                            fontSize: 20,
                           ),
                         ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      ),
+                    ),
+                    Material(
+                      color: Colors.transparent,
+                      child: TextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 4,
+                        controller: _storyController,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: StyledColors.PRIMARY_COLOR, width: 5.0),
+                          ),
+                          hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                          ),
+                          hintText: "What's on your mind about the place?",
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                (_newstoryBloc.state.storyImagePath == null)
+                    ? Container()
+                    : Expanded(
+                        child: Container(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {},
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          decoration: new BoxDecoration(
+                            image: DecorationImage(
+                              image: FileImage(
+                                  File(_newstoryBloc.state.storyImagePath)),
+                              fit: BoxFit.cover,
+                            ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey[300],
+                                blurRadius: 10.0,
+                                spreadRadius: 6.0,
+                                offset: Offset(0, 3),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                SizedBox(
+                  height: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    InkWell(
+                      child: Row(
                         children: <Widget>[
-                          InkWell(
-                            child: Icon(Icons.camera_alt),
-                            onTap: () {
-                              _newstoryBloc.add(TakeStoryImageEvent());
-                            },
-                          ),
-                          InkWell(
-                            child: Icon(Icons.photo),
-                          ),
+                          Icon(Icons.camera_alt),
+                          Text("Open Camera")
                         ],
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: RaisedButton(
-                          color: StyledColors.PRIMARY_COLOR,
-                          onPressed: () {
-                            _customSnackBar.showLoadingSnackBar();
-                            _newstoryBloc.add(StoryPublishEvent(
-                              state.storyImagePath,
-                              rootBloc.state.user.username,
-                            ));
-                          },
-                          child: Text(
-                            "Add Story",
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: StyledColors.BUTTON_TEXT_PRIMARY,
-                            ),
+                      onTap: () {
+                        _newstoryBloc.add(TakeStoryImageEvent(true));
+                      },
+                    ),
+                    Divider(),
+                    InkWell(
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.photo),
+                          Text("Gallery")
+                        ],
+                      ),
+                      onTap: () {
+                        _newstoryBloc.add(TakeStoryImageEvent(false));
+                      },
+                    ),
+                    SizedBox(height: 20,),
+                    SizedBox(
+                      width: double.infinity,
+                      child: RaisedButton(
+                        color: StyledColors.PRIMARY_COLOR,
+                        onPressed: () {
+                          _customSnackBar.showLoadingSnackBar();
+                          if (state.storyImagePath != null ||
+                              _storyController.text.trim() != "") {
+                            if (_cityEditingController.text.trim() != "") {
+                              _newstoryBloc.add(StoryPublishEvent(
+                                state.storyImagePath,
+                                _storyController.text.trim(),
+                                rootBloc.state.user.username,
+                                _cityEditingController.text.trim(),
+                              ));
+                            } else {
+                              _customSnackBar
+                                  .showErrorSnackBar("City Can not be empty!");
+                            }
+                          } else {
+                            _customSnackBar
+                                .showErrorSnackBar("Story Can not be empty!");
+                          }
+                        },
+                        child: Text(
+                          "Add Story",
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: StyledColors.BUTTON_TEXT_PRIMARY,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
 
     return MultiBlocListener(

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:logger/logger.dart';
 import 'package:whereto/theme/styled_colors.dart';
+import 'package:whereto/views/home_page/home_page.dart';
 import 'package:whereto/views/root_page/root_page.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
@@ -65,7 +66,8 @@ class _NewPostTabViewState extends State<NewPostTabView> {
     final rootBloc = BlocProvider.of<RootBloc>(context);
     log.d("Loading NewPostTab View");
 
-    CustomSnackBar customSnackBar;
+    CustomSnackBar _customSnackBar =
+        CustomSnackBar(scaffoldState: Scaffold.of(context));
     final scaffold = Scaffold(
       appBar: AppBar(
         elevation: 2,
@@ -155,14 +157,17 @@ class _NewPostTabViewState extends State<NewPostTabView> {
                     width: double.infinity,
                     child: RaisedButton(
                       color: StyledColors.PRIMARY_COLOR,
-                      onPressed: () => newposttabBloc.add(
-                        PostPublishEvent(
-                          (_placeName.text ?? "").trim(),
-                          (_description.text ?? "").trim(),
-                          state.imagePath,
-                          rootBloc.state.user.username,
-                        ),
-                      ),
+                      onPressed: () {
+                        _customSnackBar.showLoadingSnackBar();
+                        newposttabBloc.add(
+                          PostPublishEvent(
+                            (_placeName.text ?? "").trim(),
+                            (_description.text ?? "").trim(),
+                            state.imagePath,
+                            rootBloc.state.user.username,
+                          ),
+                        );
+                      },
                       child: Text(
                         "Post",
                         style: TextStyle(
@@ -184,12 +189,26 @@ class _NewPostTabViewState extends State<NewPostTabView> {
           condition: (pre, current) => pre.error != current.error,
           listener: (context, state) {
             if (state.error?.isNotEmpty ?? false) {
-              customSnackBar?.showErrorSnackBar(state.error);
+              _customSnackBar?.showErrorSnackBar(state.error);
             } else {
-              customSnackBar?.hideAll();
+              _customSnackBar?.hideAll();
             }
           },
         ),
+        BlocListener<NewPostTabBloc, NewPostTabState>(
+            condition: (pre, current) => current.successfulPublish,
+            listener: (context, state) {
+              _customSnackBar.hideAll();
+              log.d("Story Added Successfully...");
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlocProvider<HomeBloc>(
+                      create: (context) => HomeBloc(context),
+                      child: HomeView(),
+                    ),
+                  ));
+            }),
       ],
       child: scaffold,
     );

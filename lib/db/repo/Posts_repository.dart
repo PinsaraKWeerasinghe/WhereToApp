@@ -28,7 +28,7 @@ class PostsRepository implements FirebaseRepositoryI<Post> {
     post.docId = snapshot.documentID;
     post.name = data["username"];
     post.photo = data["photo_url"];
-    post.description=data["description"];
+    post.description = data["description"];
     return post;
   }
 

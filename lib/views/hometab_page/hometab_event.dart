@@ -8,5 +8,3 @@ class ErrorEvent extends HomeTabEvent {
 
   ErrorEvent(this.error);
 }
-
-

@@ -1,22 +1,16 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
-import 'package:whereto/db/authentication.dart';
 import 'package:whereto/db/model/Post.dart';
 import 'package:whereto/db/model/Story.dart';
 import 'package:whereto/db/repo/Posts_repository.dart';
 import 'package:whereto/db/repo/Stories_repository.dart';
-import 'package:whereto/theme/styled_colors.dart';
 import 'package:whereto/util/assets.dart';
-import 'package:whereto/views/hometab_page/hometab_event.dart';
-import 'package:whereto/views/newstory_page/newstory_bloc.dart';
 import 'package:whereto/views/newstory_page/newstory_page.dart';
-import 'package:whereto/views/newstory_page/newstory_view.dart';
 import 'package:whereto/views/root_page/root_bloc.dart';
+import 'package:whereto/widgets/FullScreenWidget.dart';
 import 'package:whereto/widgets/custom_snak_bar.dart';
 
 import 'hometab_bloc.dart';
@@ -63,6 +57,7 @@ class _HomeTabViewState extends State<HomeTabView> {
           ),
         ),
       ),
+      resizeToAvoidBottomPadding: false,
       body: BlocBuilder<HomeTabBloc, HomeTabState>(
           condition: (pre, current) => true,
           builder: (context, state) {
@@ -180,21 +175,30 @@ class _HomeTabViewState extends State<HomeTabView> {
   }
 
   Widget story(Story story) {
-    return SafeArea(
-      top: true,
-      bottom: true,
-      child: new Container(
-        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-        child: new SizedBox(
-          width: 50,
-          child: new Container(
-            decoration: new BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(story.photo),
-                fit: BoxFit.cover,
-              ),
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
+    return InkWell(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FullScreenImage(story),
+          ),
+        );
+      },
+      child: SafeArea(
+        top: true,
+        bottom: true,
+        child: new Container(
+          padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+          child: new SizedBox(
+            width: 50,
+            child: new Container(
+              decoration: new BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(story.photo),
+                  fit: BoxFit.cover,
+                ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
 //              boxShadow: [
 //                BoxShadow(
 //                  color: Colors.grey[300],
@@ -203,7 +207,7 @@ class _HomeTabViewState extends State<HomeTabView> {
 //                  offset: Offset(0, 3),
 //                )
 //              ],
-            ),
+              ),
 //            child: new Stack(
 //              children: <Widget>[
 //                GestureDetector(
@@ -214,6 +218,7 @@ class _HomeTabViewState extends State<HomeTabView> {
 //                ),
 //              ],
 //            ),
+            ),
           ),
         ),
       ),
@@ -329,37 +334,26 @@ class _HomeTabViewState extends State<HomeTabView> {
 //              ],
 //            ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        InkWell(
-                          child: Icon(Icons.highlight),
-                        ),
-                        Text("Like"),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        InkWell(
-                          child: Icon(Icons.comment),
-                        ),
-                        Text("Comment"),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        InkWell(
-                          child: Icon(Icons.screen_share),
-                        ),
-                        Text("Share"),
-                      ],
-                    )
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      InkWell(
+                        child: Icon(Icons.insert_emoticon),
+                      ),
+                      Text("Like"),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      InkWell(
+                        child: Icon(Icons.comment),
+                      ),
+                      Text("Comment"),
+                    ],
+                  ),
+                ],
               )
             ],
           ),

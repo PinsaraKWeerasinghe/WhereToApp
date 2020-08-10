@@ -26,6 +26,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget _newPostTab;
   Widget _profileTab;
   TabController _tabController;
+  HomeBloc homeBloc;
 
   @override
   void initState() {
@@ -53,16 +54,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    homeBloc.close();
   }
-
-  static final loadingWidget = Center(
-    child: CircularProgressIndicator(),
-  );
 
   @override
   Widget build(BuildContext context) {
-    final homeBloc = BlocProvider.of<HomeBloc>(context);
-//    final rootBloc = BlocProvider.of<RootPageBloc>(context);
+    homeBloc = BlocProvider.of<HomeBloc>(context);
+
     log.d("Loading Home View");
 
     CustomSnackBar customSnackBar;

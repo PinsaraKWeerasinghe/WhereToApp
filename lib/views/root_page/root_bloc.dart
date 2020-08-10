@@ -14,7 +14,8 @@ import 'root_state.dart';
 class RootBloc extends Bloc<RootEvent, RootState> {
   static final log = Logger();
   final _userRepository = UserRepository();
-final _authentication=Authentication();
+  final _authentication = Authentication();
+
   RootBloc(BuildContext context);
 
   @override
@@ -44,7 +45,7 @@ final _authentication=Authentication();
             )
           ]),
         );
-        if(user.length==0){
+        if (user.length == 0) {
           _authentication.logout();
           break;
         }

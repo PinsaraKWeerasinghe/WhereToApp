@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fcode_bloc/fcode_bloc.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:whereto/db/model/user.dart';
 import 'package:whereto/util/db_util.dart';
@@ -15,16 +18,21 @@ class UserRepository extends FirebaseRepository<User> {
     });
   }
 
+  void updateUser(String name, String username, String email, String status) {
+    _fireBaseInstance.document();
+  }
+
   @override
   User fromSnapshot(DocumentSnapshot snapshot) {
     if (snapshot == null) return null;
     final data = snapshot.data;
     if (data == null) return null;
     User user = User();
+    user.ref = snapshot.reference;
     user.name = data['name'] ?? "";
     user.email = data['email'];
     user.username = data['username'];
-    user.about = data['about'];
+    user.status = data['status'];
     user.profilePicture = data['profile_picture'];
     return user;
   }
@@ -35,7 +43,7 @@ class UserRepository extends FirebaseRepository<User> {
       "email": user.email,
       "name": user.name,
       "username": user.username,
-      "about":user.about,
+      "status": user.status,
     };
     return data;
   }
@@ -54,5 +62,22 @@ class UserRepository extends FirebaseRepository<User> {
       String type,
       DocumentReference parent}) {
     return super.querySingle(specification: specification, type: DBUtil.USER);
+  }
+
+  Future<String> uploadImageForUserProfilePic(String path) async {
+    String imageName = path
+        .substring(path.lastIndexOf("/"), path.lastIndexOf("."))
+        .replaceAll("/", "");
+
+    StorageTaskSnapshot snapshot = await FirebaseStorage.instance
+        .ref()
+        .child("/Users/ProfilePics/$imageName")
+        .putFile(File(path))
+        .onComplete;
+    if (snapshot.error == null) {
+      return await snapshot.ref.getDownloadURL();
+    } else {
+      return null;
+    }
   }
 }
